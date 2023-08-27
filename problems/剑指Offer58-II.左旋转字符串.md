@@ -24,7 +24,7 @@
 限制：      
 1 <= k < s.length <= 10000        
 
-# 思路
+## 思路
 
 为了让本题更有意义，提升一下本题难度：**不能申请额外空间，只能在本串上操作**。
 
@@ -66,9 +66,12 @@ public:
     }
 };
 ```
+* 时间复杂度: O(n)
+* 空间复杂度：O(1)
+
 是不是发现这代码也太简单了，哈哈。
 
-# 总结
+## 总结
 
 
 此时我们已经反转好多次字符串了，来一起回顾一下吧。
@@ -83,7 +86,7 @@ public:
 
 好了，反转字符串一共就介绍到这里，相信大家此时对反转字符串的常见操作已经很了解了。
 
-# 题外话
+## 题外话
 
 一些同学热衷于使用substr，来做这道题。
 其实使用substr 和 反转 时间复杂度是一样的 ，都是O(n)，但是使用substr申请了额外空间，所以空间复杂度是O(n)，而反转方法的空间复杂度是O(1)。
@@ -93,7 +96,8 @@ public:
 
 ## 其他语言版本
 
-Java：
+### Java：
+
 ```java
 class Solution {
     public String reverseLeftWords(String s, int n) {
@@ -138,16 +142,17 @@ class Solution {
     }
 ```
 
-python: 
+### Python: 
+（版本一）使用切片
 
 ```python
-# 方法一：可以使用切片方法
 class Solution:
     def reverseLeftWords(self, s: str, n: int) -> str:
-        return s[n:] + s[0:n]
+        return s[n:] + s[:n]
 ```
+（版本二）使用reversed + join
+
 ```python    
-# 方法二：也可以使用上文描述的方法，有些面试中不允许使用切片，那就使用上文作者提到的方法
 class Solution:
     def reverseLeftWords(self, s: str, n: int) -> str:
         s = list(s)
@@ -158,32 +163,29 @@ class Solution:
         return "".join(s)
 
 ```
+（版本三）自定义reversed函数
 
 ```python
-# 方法三：如果连reversed也不让使用，那么自己手写一个
 class Solution:
-    def reverseLeftWords(self, s: str, n: int) -> str:
-        def reverse_sub(lst, left, right):
-            while left < right:
-                lst[left], lst[right] = lst[right], lst[left]
-                left += 1
-                right -= 1
+    def reverseLeftWords(self, s: str, n: int) -> str:       
+        s_list = list(s)
         
-        res = list(s)
-        end = len(res) - 1
-        reverse_sub(res, 0, n - 1)
-        reverse_sub(res, n, end)
-        reverse_sub(res, 0, end)
-        return ''.join(res)
+        self.reverse(s_list, 0, n - 1)        
+        self.reverse(s_list, n, len(s_list) - 1)
+        self.reverse(s_list, 0, len(s_list) - 1)
 
-# 同方法二
-# 时间复杂度：O(n)
-# 空间复杂度：O(n)，python的string为不可变，需要开辟同样大小的list空间来修改
+        return ''.join(s_list)
+        
+    def reverse(self, s, start, end):
+        while start < end:
+            s[start], s[end] = s[end], s[start]
+            start += 1
+            end -= 1   
 
 ```
+（版本四）使用 模 +下标
 
 ```python 3
-#方法四：考虑不能用切片的情况下，利用模+下标实现
 class Solution:
     def reverseLeftWords(self, s: str, n: int) -> str:
         new_s = ''
@@ -193,20 +195,24 @@ class Solution:
         return new_s
 
 ```
+（版本五）使用 模 + 切片
 
 ```python 3 
-# 方法五：另类的切片方法
 class Solution:
     def reverseLeftWords(self, s: str, n: int) -> str:
-        n = len(s)
-        s = s + s 
-        return s[k : n+k]
+        l = len(s)
+        # 复制输入字符串与它自己连接
+        s = s + s
+        
+        # 计算旋转字符串的起始索引
+        k = n % (l * 2)
+        
+        # 从连接的字符串中提取旋转后的字符串并返回
+        return s[k : k + l]
 
-# 时间复杂度：O(n)
-# 空间复杂度：O(n)
 ```
 
-Go：
+### Go：
 
 ```go
 func reverseLeftWords(s string, n int) string {
@@ -229,8 +235,7 @@ func reverse(b []byte, left, right int){
 }
 ```
 
-
-JavaScript：
+### JavaScript：
 
 ```javascript
 var reverseLeftWords = function(s, n) {
@@ -274,7 +279,7 @@ var reverseLeftWords = function (s, n) {
 };
 ```
 
-TypeScript：
+### TypeScript：
 
 ```typescript
 function reverseLeftWords(s: string, n: number): string {
@@ -306,7 +311,7 @@ function reverseLeftWords(s: string, n: number): string {
 };
 ```
 
-Swift:
+### Swift:
 
 ```swift
 func reverseLeftWords(_ s: String, _ n: Int) -> String {
@@ -333,7 +338,7 @@ func reverseString(_ s: inout [Character], startIndex: Int, endIndex: Int)  {
 ```
 
 
-### PHP
+### PHP：
 
 ```php
 function reverseLeftWords($s, $n) {
@@ -353,8 +358,7 @@ function reverse(&$s, $start, $end) {
 }
 ```
 
-
-Scala:
+### Scala:
 
 ```scala
 object Solution {
@@ -383,7 +387,7 @@ object Solution {
 }
 ```
 
-Rust:
+### Rust:
 
 ```Rust
 impl Solution {
